@@ -1,0 +1,97 @@
+<body>
+
+<h1>League of Legends Visualizations</h1>
+
+<div class="row">
+  <h2>Overview</h2>
+  <div fxLayout="row" fxLayoutGap="100px">
+    This tool visualizes the positions of players' champions of League of Legends Matches
+    Champion Positions are fetched via a backend connecting to the official API provided by Riot Games.
+    Once the data is fetched, it will usually be displayed via groups of 3 heatmaps.
+    The left map will show the positions of team blue, the middle of team red, and the right of both teams mixed.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    The positions can and should be filtered by game time, as a heat map of positions of the whole game in one picture will not have much meaning.
+    Filtering by game time is done via a slider that progressively lets you choose the game-time intervals to be displayed.
+    There are different interval lengths available to view game positions of 1, 2, 5, 10 or 15 minute intervals.
+    Be careful if you choose smaller time intervals (1,2 or 5 minutes) when you look at position data of a small number of matches,
+    which can happen depending on your query! You might only get a random number of dots instead of coherent movement data, especially at
+    later game times.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    Below, you can see the map that is used as a background for the heatmaps, as well as a legend explaining the symbols used.
+  </div>
+  <br />
+  <iframe src="https://drive.google.com/file/d/1ccEkUWHrIz5b1q7jLF4EhTLCP2Kh0Wpf/preview" width="600" height="380" allow="autoplay"></iframe>
+
+</div>
+
+<br />
+<h3> There are 3 different options to create these Heatmaps </h3>
+<br />
+
+<div class="container">
+  <button class="nav-item nav-link" routerLink="/slider"> Team positions of personal match history <span class="sr-only"></span></button>
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can search the match history of one specific player, either looking at all their matches or filtering further.
+    The position data of all team members will be displayed, not just of the one player.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can filter by the champion the player chose (champion name), the team they played in (red/blue), and if you chose a team,
+    you can also filter by whether the player's team won or lost.
+  </div>
+</div>
+
+<br />   <br />
+
+<div class="container">
+  <button class="nav-item nav-link" routerLink="/sliderSingles"> Player positions of personal match history <span class="sr-only"></span></button>
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can search the match history of one specific player, either looking at all their matches, matches where they played one specific champion or filtering further.
+    The position data of only their own champion's positions will be displayed.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can enter a champion the player chose (champion name), and can additionally filter by the team they played in (red/blue).
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    If you don't filter by champions, the map will likely not be very useful depending on how many matches the player played and
+    whether they play different lanes in general.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    If you filter by team, you will not get 3 maps as usual, but instead two maps that show how the chosen champion in the chosen team
+    moved in matches that were won (left map) or lost (right map)
+  </div>
+</div>
+
+<br />   <br />
+
+<div class="container">
+  <button class="nav-item nav-link" routerLink="/sliderMultiplePlayers"> Team positions of a randomized sample of match histories <span class="sr-only"></span></button>
+  <div fxLayout="row" fxLayoutGap="100px">
+    This option intends to give you a more general picture of how players position themselves in a Lol Match.
+    You do not search one player's match history, but instead get matches of several different players' matches.
+    The position data of all players' positions will be displayed. Again, filter options are available.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can either look at matches in general or choose both a team (red/blue) and that team's outcome (win/lose).
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    Additionally, you can choose a sample size of how many random matches that match the query will be taken for creating
+    the visualizations. If the sample size too small, the visualizations might not portray a balanced picture of average
+    matches. If the sample size is larger than the amount of matches matches the query, all found matches will instead be
+    fetched.
+  </div>
+</div>
+
+</body>
+
+
+<router-outlet></router-outlet>

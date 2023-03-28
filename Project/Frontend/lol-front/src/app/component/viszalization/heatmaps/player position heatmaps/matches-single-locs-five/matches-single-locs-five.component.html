@@ -1,0 +1,26 @@
+<div class="container">
+
+  <form novalidate [formGroup]="slider">
+    <div class="flex-box">
+
+      <span>
+        <ng-container *ngIf="chosenTime===50; else timeslice"> Whole Game </ng-container>
+        <ng-template #timeslice>
+          <ng-container *ngIf="chosenTime===45; else slice"> Minutes 40 and over </ng-container>
+        </ng-template>
+        <ng-template #slice>
+          Minutes {{chosenTime-5}} to {{chosenTime}}
+        </ng-template>
+      </span>
+
+      <span>
+        <input type="range" class="form-control" name="slider" id=mySlider formControlName="time" min=5 max=50 step=5 (ngModelChange)="updateTimeSlice()">
+      </span>
+
+    </div>
+  </form>
+
+  <figure id="heat" #chartEl></figure>
+  <svg #chartEl></svg>
+
+</div>

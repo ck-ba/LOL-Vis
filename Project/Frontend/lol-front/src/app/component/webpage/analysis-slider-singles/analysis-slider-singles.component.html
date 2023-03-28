@@ -1,0 +1,331 @@
+<body>
+
+<h1>Player positions of personal match history</h1>
+
+<div class="container">
+
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can search the match history of one specific player, either looking at all their matches, matches where they played one specific champion or filtering further.
+    The position data of only their own champion's positions will be displayed.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    You can enter a champion the player chose (champion name), and can additionally filter by the team they played in (red/blue).
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    If you don't filter by champions, the map will likely not be very useful depending on how many matches the player played and
+    whether they play different lanes in general.
+  </div>
+  <br />
+  <div fxLayout="row" fxLayoutGap="100px">
+    If you filter by team, you will not get 3 maps as usual, but instead two maps that show how the chosen champion in the chosen team
+    moved in matches that were won (left map) or lost (right map)
+  </div>
+
+</div>
+<br /> <br />
+
+
+
+<form novalidate [formGroup]="searchForm">
+  <h2>Player Position Search</h2>
+
+  <div class="container">
+
+    <div class="flex-box">
+      <span>Player</span>
+      <span>
+        <input type="text"
+               formControlName="playerName"
+               class="form-control"
+               placeholder="Player Name"
+        />
+      </span>
+    </div>
+
+    <div class="flex-box">
+      <span>Champion (Optional)</span>
+      <span>
+        <input type="text"
+               formControlName="championName"
+               class="form-control"
+               placeholder="Champion Name"
+        />
+      </span>
+    </div>
+
+    <div class="flex-box">
+      <span>Team (Optional)</span>
+      <span>
+        <input type="text"
+               formControlName="playerTeam"
+               class="form-control"
+               placeholder="blue/red"
+        />
+      </span>
+    </div>
+
+    <div class="col-md-3">
+      <div [hidden]="searched">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div [hidden]="!searched">
+        <button type="button" (click)="resetSearch()">Reset Search</button>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<br /> <br />
+
+<div *ngIf="matchData">
+  <h3> {{matchData.length}} Matches matching query </h3>
+  <br />
+
+  <form [formGroup]="sliderType" (ngSubmit)="updateSliderComponent()">
+
+    <div class="flex-box">
+
+      <span>
+        Select Time-Interval Length
+      </span>
+
+      <span>
+        <select formControlName="intervalSize">
+          <option [ngValue]="null" disabled>Select Time-Interval Length for Slider </option>
+          <option *ngFor="let slider of sliders" [ngValue]="slider.id">{{slider.name}}</option>
+        </select>
+      </span>
+
+    </div>
+
+    <button type="submit">Choose Interval</button>
+
+  </form>
+
+<br />
+
+  <ng-container *ngIf="this.chosenSlider=='15'; else check10">
+    <h2> Positions in 15-Minute Intervals </h2>
+    <div class="row">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <div class="col">
+          <h2>Team Blue</h2>
+          <app-matches-single-locs-fifteen [matchData]="matchData" [team]="'blue'" [playerName]="player"></app-matches-single-locs-fifteen>
+        </div>
+        <div class="col">
+          <h2>Team Red</h2>
+          <app-matches-single-locs-fifteen [matchData]="matchData" [team]="'red'" [playerName]="player"></app-matches-single-locs-fifteen>
+        </div>
+        <div class="col">
+          <h2>Both Teams</h2>
+          <app-matches-single-locs-fifteen [matchData]="matchData" [team]="'both'" [playerName]="player"></app-matches-single-locs-fifteen>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #check10>
+    <ng-container *ngIf="this.chosenSlider=='10'; else check5">
+      <h2> Positions in 10-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h2>Team Blue</h2>
+            <app-matches-single-locs-ten [matchData]="matchData" [team]="'blue'" [playerName]="player"></app-matches-single-locs-ten>
+          </div>
+          <div class="col">
+            <h2>Team Red</h2>
+            <app-matches-single-locs-ten [matchData]="matchData" [team]="'red'" [playerName]="player"></app-matches-single-locs-ten>
+          </div>
+          <div class="col">
+            <h2>Both Teams</h2>
+            <app-matches-single-locs-ten [matchData]="matchData" [team]="'both'" [playerName]="player"></app-matches-single-locs-ten>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check5>
+    <ng-container *ngIf="this.chosenSlider=='5'; else check2">
+      <h2> Positions in 5-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h2>Team Blue</h2>
+            <app-matches-single-locs-five [matchData]="matchData" [team]="'blue'" [playerName]="player"></app-matches-single-locs-five>
+          </div>
+          <div class="col">
+            <h2>Team Red</h2>
+            <app-matches-single-locs-five [matchData]="matchData" [team]="'red'" [playerName]="player"></app-matches-single-locs-five>
+          </div>
+          <div class="col">
+            <h2>Both Teams</h2>
+            <app-matches-single-locs-five [matchData]="matchData" [team]="'both'" [playerName]="player"></app-matches-single-locs-five>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check2>
+    <ng-container *ngIf="this.chosenSlider=='2'; else check1">
+      <h2> Positions in 2-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h2>Team Blue</h2>
+            <app-matches-gametime-detail-animation-heat [matchData]="matchData" [player]="player" [team]="'blue'"></app-matches-gametime-detail-animation-heat>
+          </div>
+          <div class="col">
+            <h2>Team Red</h2>
+            <app-matches-gametime-detail-animation-heat [matchData]="matchData" [player]="player" [team]="'red'"></app-matches-gametime-detail-animation-heat>
+          </div>
+          <div class="col">
+            <h2>Both Teams</h2>
+            <app-matches-gametime-detail-animation-heat [matchData]="matchData" [player]="player" [team]="'both'"></app-matches-gametime-detail-animation-heat>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check1>
+    <h2> Positions in 1-Minute Intervals </h2>
+    <div class="row">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <div class="col">
+          <h2>Team Blue</h2>
+          <app-heatmap-animation-fine [matchData]="matchData" [player]="player" [team]="'blue'"></app-heatmap-animation-fine>
+        </div>
+        <div class="col">
+          <h2>Team Red</h2>
+          <app-heatmap-animation-fine [matchData]="matchData" [player]="player" [team]="'red'"></app-heatmap-animation-fine>
+        </div>
+        <div class="col">
+          <h2>Both Teams</h2>
+          <app-heatmap-animation-fine [matchData]="matchData" [player]="this.player" [team]="'both'"></app-heatmap-animation-fine>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+</div>
+
+<div *ngIf="matchDataWon">
+  <div *ngIf="matchDataLost">
+
+  <form [formGroup]="sliderType" (ngSubmit)="updateSliderComponent()">
+
+    <div class="flex-box">
+
+      <span>
+        Select Time-Interval Length
+      </span>
+
+      <span>
+        <select formControlName="intervalSize">
+          <option [ngValue]="null" disabled>Select Time-Interval Length for Slider </option>
+          <option *ngFor="let slider of sliders" [ngValue]="slider.id">{{slider.name}}</option>
+        </select>
+      </span>
+
+    </div>
+
+    <button type="submit">Choose Interval</button>
+
+  </form>
+
+  <br />
+
+  <ng-container *ngIf="this.chosenSlider=='15'; else check10">
+    <h2> Positions by Game Phase </h2>
+    <div class="row">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <div class="col">
+          <h3> {{matchDataWon.length}} Matches WON</h3>
+          <app-matches-single-locs-fifteen [matchData]="matchDataWon" [team]="team" [playerName]="player"></app-matches-single-locs-fifteen>
+        </div>
+        <div class="col">
+          <h3> {{matchDataLost.length}} Matches LOST</h3>
+          <app-matches-single-locs-fifteen [matchData]="matchDataLost" [team]="team" [playerName]="player"></app-matches-single-locs-fifteen>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #check10>
+    <ng-container *ngIf="this.chosenSlider=='10'; else check5">
+      <h2> Positions in 10-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h3> {{matchDataWon.length}} Matches WON</h3>
+            <app-matches-single-locs-ten [matchData]="matchDataWon" [team]="team" [playerName]="player"></app-matches-single-locs-ten>
+          </div>
+          <div class="col">
+            <h3> {{matchDataLost.length}} Matches LOST</h3>
+            <app-matches-single-locs-ten [matchData]="matchDataLost" [team]="team" [playerName]="player"></app-matches-single-locs-ten>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check5>
+    <ng-container *ngIf="this.chosenSlider=='5'; else check2">
+      <h2> Positions in 5-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h3> {{matchDataWon.length}} Matches WON</h3>
+            <app-matches-single-locs-five [matchData]="matchDataWon" [team]="team" [playerName]="player"></app-matches-single-locs-five>
+          </div>
+          <div class="col">
+            <h3> {{matchDataLost.length}} Matches LOST</h3>
+            <app-matches-single-locs-five [matchData]="matchDataLost" [team]="team" [playerName]="player"></app-matches-single-locs-five>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check2>
+    <ng-container *ngIf="this.chosenSlider=='2'; else check1">
+      <h2> Positions in 2-Minute Intervals </h2>
+      <div class="row">
+        <div fxLayout="row" fxLayoutGap="5px">
+          <div class="col">
+            <h3> {{matchDataWon.length}} Matches WON</h3>
+            <app-matches-gametime-detail-animation-heat [matchData]="matchDataWon" [player]="player" [team]="team"></app-matches-gametime-detail-animation-heat>
+          </div>
+          <div class="col">
+            <h3> {{matchDataLost.length}} Matches LOST</h3>
+            <app-matches-gametime-detail-animation-heat [matchData]="matchDataLost" [player]="player" [team]="team"></app-matches-gametime-detail-animation-heat>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #check1>
+    <h2> Positions in 1-Minute Intervals </h2>
+    <div class="row">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <div class="col">
+          <h3> {{matchDataWon.length}} Matches WON</h3>
+          <app-heatmap-animation-fine [matchData]="matchDataWon" [player]="player" [team]="team"></app-heatmap-animation-fine>
+        </div>
+        <div class="col">
+          <h3> {{matchDataLost.length}} Matches LOST</h3>
+          <app-heatmap-animation-fine [matchData]="matchDataLost" [player]="player" [team]="team"></app-heatmap-animation-fine>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+</div>
+</div>
+
+</body>
+
+
+
+
